@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Trait\IdentiableTrait;
 use App\Entity\Trait\TimestampableTrait;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: '`user`')]
