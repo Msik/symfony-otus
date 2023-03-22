@@ -21,9 +21,13 @@ class User
     #[ORM\OneToMany(targetEntity: UserPoint::class, mappedBy: 'user')]
     private Collection $points;
 
+    #[ORM\ManyToMany(targetEntity: Course::class, mappedBy: 'users')]
+    private Collection $courses;
+
     public function __construct()
     {
         $this->points = new ArrayCollection();
+        $this->courses = new ArrayCollection();
     }
 
     public function getPhone(): string
@@ -40,6 +44,13 @@ class User
     {
         if (!$this->points->contains($userPoint)) {
             $this->points->add($userPoint);
+        }
+    }
+
+    public function addCourse(Course $course): void
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses->add($course);
         }
     }
 }

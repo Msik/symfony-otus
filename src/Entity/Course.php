@@ -24,10 +24,17 @@ class Course
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: Module::class)]
     private Collection $modules;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'courses')]
+    #[ORM\JoinTable(name: 'user_course')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->lessons = new ArrayCollection();
         $this->modules = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getTitle(): string
@@ -51,6 +58,13 @@ class Course
     {
         if (!$this->modules->contains($module)) {
             $this->modules->add($module);
+        }
+    }
+
+    public function addUser(User $user)
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
         }
     }
 }
