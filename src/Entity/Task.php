@@ -7,14 +7,19 @@ use App\Entity\Trait\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'task')]
+#[ORM\Index(columns: ['lesson_id'], name: 'task__lesson_id__ind')]
 #[ORM\Entity]
 class Task
 {
     use IdentiableTrait;
     use TimestampableTrait;
 
-    #[ORM\Column(type: 'string', length: 140, nullable: false)]
+    #[ORM\Column(type: 'string', nullable: false)]
     private string $title;
+
+    #[ORM\ManyToOne(targetEntity: Lesson::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(name: 'lesson_id', referencedColumnName: 'id')]
+    private Lesson $lesson;
 
     public function getTitle(): string
     {

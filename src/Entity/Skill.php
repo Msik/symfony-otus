@@ -13,7 +13,7 @@ class Skill
     use IdentiableTrait;
     use TimestampableTrait;
 
-    #[ORM\Column(type: 'string', length: 140, nullable: false)]
+    #[ORM\Column(type: 'string', nullable: false)]
     private string $title;
 
     public function getTitle(): string
