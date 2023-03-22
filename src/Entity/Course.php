@@ -21,9 +21,13 @@ class Course
     #[ORM\OneToMany(mappedBy: 'course', targetEntity: Lesson::class)]
     private Collection $lessons;
 
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Module::class)]
+    private Collection $modules;
+
     public function __construct()
     {
         $this->lessons = new ArrayCollection();
+        $this->modules = new ArrayCollection();
     }
 
     public function getTitle(): string
@@ -40,6 +44,13 @@ class Course
     {
         if (!$this->lessons->contains($lesson)) {
             $this->lessons->add($lesson);
+        }
+    }
+
+    public function addModule(Module $module)
+    {
+        if (!$this->modules->contains($module)) {
+            $this->modules->add($module);
         }
     }
 }
