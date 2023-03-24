@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use App\Entity\Trait\IdentiableTrait;
 use App\Entity\Trait\TimestampableTrait;
+use App\Repository\UserPointRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'user_point')]
 #[ORM\Index(columns: ['user_id'], name: 'user_point__user_id__ind')]
 #[ORM\Index(columns: ['task_id'], name: 'user_point__task_id__ind')]
 #[ORM\Index(columns: ['skill_id'], name: 'user_point__skill_id__ind')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: UserPointRepository::class)]
 class UserPoint
 {
     use IdentiableTrait;
