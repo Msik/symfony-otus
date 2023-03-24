@@ -54,6 +54,11 @@ class Course
         }
     }
 
+    public function getLessons(): Collection
+    {
+        return $this->lessons;
+    }
+
     public function addModule(Module $module)
     {
         if (!$this->modules->contains($module)) {
@@ -61,10 +66,20 @@ class Course
         }
     }
 
+    public function getModules(): Collection
+    {
+        return $this->modules;
+    }
+
     public function addUser(User $user)
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
         }
+    }
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
     }
 }

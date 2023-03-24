@@ -29,7 +29,7 @@ class Lesson
 
     #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: 'lessons')]
     #[ORM\JoinColumn(name: 'module_id', referencedColumnName: 'id')]
-    private Module $module;
+    private ?Module $module;
 
     public function __construct()
     {
@@ -61,7 +61,7 @@ class Lesson
         return $this->module;
     }
 
-    public function setModule(Module $module): void
+    public function setModule(?Module $module): void
     {
         $this->module = $module;
     }

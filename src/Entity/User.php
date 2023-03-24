@@ -53,4 +53,9 @@ class User
             $this->courses->add($course);
         }
     }
+
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
 }
