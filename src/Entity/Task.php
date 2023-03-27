@@ -18,7 +18,7 @@ class Task
     private string $title;
 
     #[ORM\ManyToOne(targetEntity: Lesson::class, inversedBy: 'tasks')]
-    #[ORM\JoinColumn(name: 'lesson_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'lesson_id', referencedColumnName: 'id', nullable: false)]
     private Lesson $lesson;
 
     public function getTitle(): string

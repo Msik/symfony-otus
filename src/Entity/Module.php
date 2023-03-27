@@ -20,7 +20,7 @@ class Module
     private string $title;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'modules')]
-    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: false)]
     private Course $course;
 
     #[ORM\OneToMany(mappedBy: 'module', targetEntity: Lesson::class)]

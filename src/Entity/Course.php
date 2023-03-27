@@ -26,8 +26,8 @@ class Course
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'courses')]
     #[ORM\JoinTable(name: 'user_course')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private Collection $users;
 
     public function __construct()

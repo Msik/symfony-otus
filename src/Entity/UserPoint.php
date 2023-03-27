@@ -18,11 +18,11 @@ class UserPoint
     use TimestampableTrait;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'points')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private User $user;
 
     #[ORM\ManyToOne(targetEntity: Task::class)]
-    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: false)]
     private Task $task;
 
     #[ORM\ManyToOne(targetEntity: Skill::class)]

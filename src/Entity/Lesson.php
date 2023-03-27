@@ -24,7 +24,7 @@ class Lesson
     private Collection $tasks;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'lessons')]
-    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: false)]
     private Course $course;
 
     #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: 'lessons')]
