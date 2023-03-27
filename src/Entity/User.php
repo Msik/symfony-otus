@@ -15,7 +15,7 @@ class User
     use IdentiableTrait;
     use TimestampableTrait;
 
-    #[ORM\Column(type: 'string', length: 32, nullable: false)]
+    #[ORM\Column(type: 'string', length: 16, nullable: false)]
     private string $phone;
 
     #[ORM\OneToMany(targetEntity: UserPoint::class, mappedBy: 'user')]
