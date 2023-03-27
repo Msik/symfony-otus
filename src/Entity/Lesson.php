@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Trait\IdentiableTrait;
 use App\Entity\Trait\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,8 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Lesson
 {
-    use IdentiableTrait;
     use TimestampableTrait;
+
+    #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', nullable: false)]
     private string $title;
@@ -34,6 +37,16 @@ class Lesson
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getTitle(): string

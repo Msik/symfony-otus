@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Trait\IdentiableTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\UserPointRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,8 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserPointRepository::class)]
 class UserPoint
 {
-    use IdentiableTrait;
     use TimestampableTrait;
+
+    #[ORM\Column(name: 'id', type: 'bigint', unique: true)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'points')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
@@ -32,6 +35,16 @@ class UserPoint
 
     #[ORM\Column(type: 'smallint', nullable: false)]
     private int $points = 0;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function getUser(): User
     {
