@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(columns: ['user_id'], name: 'user_point__user_id__ind')]
 #[ORM\Index(columns: ['task_id'], name: 'user_point__task_id__ind')]
 #[ORM\Index(columns: ['skill_id'], name: 'user_point__skill_id__ind')]
+#[ORM\Index(columns: ['user_id', 'task_id'], name: 'user_point__user_id__task_id__ind')]
 #[ORM\Entity(repositoryClass: UserPointRepository::class)]
 class UserPoint
 {
