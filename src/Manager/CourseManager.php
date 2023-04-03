@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\Course;
+use App\Repository\CourseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CourseManager
@@ -32,5 +33,21 @@ class CourseManager
         $this->entityManager->flush();
 
         return $course->getId();
+    }
+
+    public function updateCourse(int $courseId, string $title): ?Course
+    {
+        /** @var CourseRepository $repository */
+        $repository = $this->entityManager->getRepository(Course::class);
+        /** @var Course $course */
+        $course = $repository->find($courseId);
+        if (!$course) {
+            return null;
+        }
+
+        $course->setTitle($title);
+        $this->entityManager->flush();
+
+        return $course;
     }
 }

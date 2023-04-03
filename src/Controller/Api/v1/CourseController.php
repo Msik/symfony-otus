@@ -44,6 +44,19 @@ class CourseController
             return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse(['success' => true, 'courseId' => $courseId], Response::HTTP_OK);
+        return new JsonResponse(['success' => true, 'courseId' => $courseId]);
+    }
+
+    #[Route('', name: 'update_course', methods: ['PUT'])]
+    public function updateCourse(Request $request): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['courseId'] || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->courseManager->updateCourse($body['courseId'], $body['title']);
+
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 }
