@@ -10,14 +10,14 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
-#[Route(path: '/api/v1/course')]
+#[Route(path: '/api/v1/courses')]
 class CourseController
 {
     public function __construct(
         private readonly CourseManager $courseManager,
     ) {}
 
-    #[Route('/', methods: ['GET'])]
+    #[Route('', name: 'get_courses', methods: ['GET'])]
     public function getCourses(Request $request): Response
     {
         $perPage = $request->query->get('perPage') ?? 5;
@@ -28,5 +28,22 @@ class CourseController
         }
 
         return new JsonResponse($this->courseManager->getCoursesByUser($user, $page, $perPage));
+    }
+
+    #[Route('',name: 'store_course', methods: ['POST'])]
+    public function storeCourse(Request $request): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $title = $body['title'];
+        $courseId = $this->courseManager->storeCourse($title);
+        if (!$courseId) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse(['success' => true, 'courseId' => $courseId], Response::HTTP_OK);
     }
 }

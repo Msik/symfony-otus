@@ -23,4 +23,14 @@ class CourseManager
             'courses' => array_map(static fn ($course) => $course->toArray(), (array)$paginator->getIterator()),
         ];
     }
+
+    public function storeCourse(string $title): ?int
+    {
+        $course = new Course;
+        $course->setTitle($title);
+        $this->entityManager->persist($course);
+        $this->entityManager->flush();
+
+        return $course->getId();
+    }
 }
