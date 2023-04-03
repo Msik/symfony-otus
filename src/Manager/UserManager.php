@@ -50,4 +50,20 @@ class UserManager
 
         return $user;
     }
+
+    public function deleteUserById(int $userId): bool
+    {
+        /** @var UserRepository $repository */
+        $repository = $this->entityManager->getRepository(User::class);
+        /** @var User $user */
+        $user = $repository->find($userId);
+        if (!$user) {
+            return false;
+        }
+
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }
