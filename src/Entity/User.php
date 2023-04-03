@@ -19,7 +19,7 @@ class User
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 16, nullable: false)]
+    #[ORM\Column(type: 'string', length: 16, nullable: false, unique: true)]
     private string $phone;
 
     #[ORM\OneToMany(targetEntity: UserPoint::class, mappedBy: 'user')]
