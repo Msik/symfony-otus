@@ -27,7 +27,7 @@ class CourseManager
 
     public function storeCourse(string $title): ?int
     {
-        $course = new Course;
+        $course = new Course();
         $course->setTitle($title);
         $this->entityManager->persist($course);
         $this->entityManager->flush();

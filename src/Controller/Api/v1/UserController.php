@@ -25,4 +25,20 @@ class UserController
 
         return new JsonResponse($this->userManager->getUsers($page, $perPage));
     }
+
+    #[Route('', name: 'store_user', methods: ['POST'])]
+    public function storeUser(Request $request): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['phone']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $userId = $this->userManager->storeUser($body['phone']);
+        if (!$userId) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse(['success' => true, 'userId' => $userId]);
+    }
 }

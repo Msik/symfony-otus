@@ -24,4 +24,14 @@ class UserManager
             'users' => array_map(static fn (User $user) => $user->toArray(), (array)$paginator->getIterator()),
         ];
     }
+
+    public function storeUser(string $phone): ?int
+    {
+        $user = new User();
+        $user->setPhone($phone);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user->getId();
+    }
 }
