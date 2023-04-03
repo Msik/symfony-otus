@@ -50,4 +50,20 @@ class CourseManager
 
         return $course;
     }
+
+    public function deleteCourseById(int $courseId): bool
+    {
+        /** @var CourseRepository $repository */
+        $repository = $this->entityManager->getRepository(Course::class);
+        /** @var Course $course */
+        $course = $repository->find($courseId);
+        if (!$course) {
+            return false;
+        }
+
+        $this->entityManager->remove($course);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }
