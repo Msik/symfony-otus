@@ -21,7 +21,7 @@ class CourseManager
 
         return [
             'maxPage' => $maxPage,
-            'courses' => array_map(static fn ($course) => $course->toArray(), (array)$paginator->getIterator()),
+            'courses' => array_map(static fn (Course $course) => $course->toArray(), (array)$paginator->getIterator()),
         ];
     }
 
