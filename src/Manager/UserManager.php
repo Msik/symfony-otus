@@ -34,4 +34,20 @@ class UserManager
 
         return $user->getId();
     }
+
+    public function updateUser(int $userId, string $phone): ?User
+    {
+        /** @var UserRepository $repository */
+        $repository = $this->entityManager->getRepository(User::class);
+        /** @var User $user */
+        $user = $repository->find($userId);
+        if (!$user) {
+            return null;
+        }
+
+        $user->setPhone($phone);
+        $this->entityManager->flush();
+
+        return $user;
+    }
 }

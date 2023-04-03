@@ -41,4 +41,17 @@ class UserController
 
         return new JsonResponse(['success' => true, 'userId' => $userId]);
     }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'update_user', methods: ['PUT'])]
+    public function updateCourse(Request $request, int $id): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['phone']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->userManager->updateUser($id, $body['phone']);
+
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
 }
