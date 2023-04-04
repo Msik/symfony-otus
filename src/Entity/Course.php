@@ -104,7 +104,9 @@ class Course
             'title' => $this->title,
             'lessons' => [],
             'modules' => [],
-            'users' => [],
+            'users' => array_map(static fn(User $user) => $user->toArray(), $this->users->toArray()),
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
         ];
     }
 }
