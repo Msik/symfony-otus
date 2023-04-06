@@ -41,4 +41,17 @@ class ModuleController
 
         return new JsonResponse(['success' => true, 'moduleId' => $skillId]);
     }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'update_module', methods: ['PUT'])]
+    public function updateModule(Request $request, int $id): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->moduleManager->updateModule($id, $body['title']);
+
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
 }

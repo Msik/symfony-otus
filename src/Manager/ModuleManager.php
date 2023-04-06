@@ -44,4 +44,20 @@ class ModuleManager
 
         return $module->getId();
     }
+
+    public function updateModule(int $moduleId, string $title): ?Module
+    {
+        /** @var ModuleRepository $repository */
+        $repository = $this->entityManager->getRepository(Module::class);
+        /** @var Module $module */
+        $module = $repository->find($moduleId);
+        if (!$module) {
+            return null;
+        }
+
+        $module->setTitle($title);
+        $this->entityManager->flush();
+
+        return $module;
+    }
 }
