@@ -54,4 +54,12 @@ class ModuleController
 
         return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_module', methods: ['DELETE'])]
+    public function deleteModule(int $id): Response
+    {
+        $result = $this->moduleManager->deleteModuleById($id);
+
+        return new JsonResponse(['success' => $result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
 }

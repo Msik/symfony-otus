@@ -60,4 +60,20 @@ class ModuleManager
 
         return $module;
     }
+
+    public function deleteModuleById(int $moduleId): bool
+    {
+        /** @var ModuleRepository $repository */
+        $repository = $this->entityManager->getRepository(Module::class);
+        /** @var Module $module */
+        $module = $repository->find($moduleId);
+        if (!$module) {
+            return false;
+        }
+
+        $this->entityManager->remove($module);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }
