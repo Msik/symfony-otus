@@ -26,4 +26,20 @@ class TaskController
 
         return new JsonResponse($this->taskManager->getTasks($lessonId, $page, $perPage));
     }
+
+    #[Route('', name: 'store_task', methods: ['POST'])]
+    public function storeTask(Request $request, int $lessonId): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $taskId = $this->taskManager->storeTask($lessonId, $body['title']);
+        if (!$taskId) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse(['success' => true, 'taskId' => $taskId]);
+    }
 }

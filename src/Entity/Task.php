@@ -45,6 +45,16 @@ class Task
         $this->title = $title;
     }
 
+    public function getLesson(): Lesson
+    {
+        return $this->lesson;
+    }
+
+    public function setLesson(Lesson $lesson): void
+    {
+        $this->lesson = $lesson;
+    }
+
     public function toArray(): array
     {
         return [
