@@ -35,4 +35,20 @@ class SkillManager
 
         return $task->getId();
     }
+
+    public function updateSkill(int $taskId, string $title): ?Skill
+    {
+        /** @var SkillRepository $repository */
+        $repository = $this->entityManager->getRepository(Skill::class);
+        /** @var Skill $skill */
+        $skill = $repository->find($taskId);
+        if (!$skill) {
+            return null;
+        }
+
+        $skill->setTitle($title);
+        $this->entityManager->flush();
+
+        return $skill;
+    }
 }

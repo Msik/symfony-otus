@@ -42,4 +42,17 @@ class SkillController
 
         return new JsonResponse(['success' => true, 'skillId' => $skillId]);
     }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'update_skill', methods: ['PUT'])]
+    public function updateTask(Request $request, int $id): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->skillManager->updateSkill($id, $body['title']);
+
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
 }

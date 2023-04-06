@@ -45,7 +45,7 @@ class TaskManager
     {
         /** @var TaskRepository $repository */
         $repository = $this->entityManager->getRepository(Task::class);
-        /** @var Task $user */
+        /** @var Task $task */
         $task = $repository->find($taskId);
         if (!$task) {
             return null;
@@ -61,7 +61,7 @@ class TaskManager
     {
         /** @var TaskRepository $repository */
         $repository = $this->entityManager->getRepository(Task::class);
-        /** @var Task $user */
+        /** @var Task $task */
         $task = $repository->find($taskId);
         if (!$task) {
             return false;
