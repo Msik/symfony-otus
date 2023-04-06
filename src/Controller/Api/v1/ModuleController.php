@@ -3,7 +3,6 @@
 namespace App\Controller\Api\v1;
 
 use App\Manager\ModuleManager;
-use App\Manager\SkillManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
-#[Route(path: '/api/v1/modules')]
+#[Route(path: '/api/v1/courses/{courseId}/modules')]
 class ModuleController
 {
     public function __construct(
@@ -19,17 +18,27 @@ class ModuleController
     ) {}
 
     #[Route('', name: 'get_modules', methods: ['GET'])]
-    public function getModules(Request $request): Response
+    public function getModules(Request $request, int $courseId): Response
     {
         $perPage = $request->query->get('perPage') ?? 5;
         $page = $request->query->get('page') ?? 1;
-        $course = $request->query->get('course');
-        if (!$course) {
-            return new JsonResponse([], 404);
+
+        return new JsonResponse($this->moduleManager->getModulesByCourse($courseId, $page, $perPage));
+    }
+
+    #[Route('', name: 'store_module', methods: ['POST'])]
+    public function storeModule(Request $request, int $courseId): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        dd($this->moduleManager->getModulesByCourse($course, $page, $perPage));
+        $skillId = $this->moduleManager->storeModule($courseId, $body['title']);
+        if (!$skillId) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
+        }
 
-        return new JsonResponse($this->moduleManager->getModulesByCourse($course, $page, $perPage));
+        return new JsonResponse(['success' => true, 'moduleId' => $skillId]);
     }
 }

@@ -27,20 +27,20 @@ class SkillManager
 
     public function storeSkill(string $titke): ?int
     {
-        $task = new Skill();
-        $task->setTitle($titke);
-        $this->entityManager->persist($task);
+        $skill = new Skill();
+        $skill->setTitle($titke);
+        $this->entityManager->persist($skill);
         $this->entityManager->flush();
 
-        return $task->getId();
+        return $skill->getId();
     }
 
-    public function updateSkill(int $taskId, string $title): ?Skill
+    public function updateSkill(int $skillId, string $title): ?Skill
     {
         /** @var SkillRepository $repository */
         $repository = $this->entityManager->getRepository(Skill::class);
         /** @var Skill $skill */
-        $skill = $repository->find($taskId);
+        $skill = $repository->find($skillId);
         if (!$skill) {
             return null;
         }
