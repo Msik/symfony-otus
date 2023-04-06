@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use App\Entity\Trait\TimestampableTrait;
+use App\Repository\ModuleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'module')]
 #[ORM\Index(columns: ['course_id'], name: 'module__course_id__ind')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ModuleRepository::class)]
 class Module
 {
     use TimestampableTrait;
@@ -69,5 +70,16 @@ class Module
         if (!$this->lessons->contains($lesson)) {
             $this->lessons->add($lesson);
         }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'lessons' => array_map(static fn(Lesson $lesson) => $lesson->toArray(), $this->lessons->toArray()),
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
+        ];
     }
 }

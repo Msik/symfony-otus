@@ -3,7 +3,6 @@
 namespace App\Manager;
 
 use App\Entity\Skill;
-use App\Entity\User;
 use App\Repository\SkillRepository;
 use Doctrine\ORM\EntityManagerInterface;
 

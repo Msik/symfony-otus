@@ -3,7 +3,6 @@
 namespace App\Controller\Api\v1;
 
 use App\Manager\SkillManager;
-use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

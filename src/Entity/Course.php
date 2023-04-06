@@ -102,8 +102,8 @@ class Course
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'lessons' => [],
-            'modules' => [],
+            'lessons' => array_map(static fn (Lesson $lesson) => $lesson->toArray(), $this->lessons->toArray()),
+            'modules' => array_map(static fn (Module $module) => $module->toArray(), $this->modules->toArray()),
             'users' => array_map(static fn(User $user) => $user->toArray(), $this->users->toArray()),
             'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),

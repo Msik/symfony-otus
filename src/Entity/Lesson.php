@@ -85,4 +85,17 @@ class Lesson
             $this->tasks->add($task);
         }
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'tasks' => array_map(static fn (Task $task) => $task->toArray(), $this->tasks->toArray()),
+            'course' => $this->course->toArray(),
+            'module' => $this->module ? $this->module->toArray() : null,
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
+        ];
+    }
 }
