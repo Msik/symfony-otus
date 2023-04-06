@@ -56,4 +56,20 @@ class TaskManager
 
         return $task;
     }
+
+    public function deleteTaskById(int $taskId): bool
+    {
+        /** @var TaskRepository $repository */
+        $repository = $this->entityManager->getRepository(Task::class);
+        /** @var Task $user */
+        $task = $repository->find($taskId);
+        if (!$task) {
+            return false;
+        }
+
+        $this->entityManager->remove($task);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }

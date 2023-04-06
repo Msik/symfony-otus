@@ -55,4 +55,12 @@ class TaskController
 
         return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_task', methods: ['DELETE'])]
+    public function deleteCourse(int $id): Response
+    {
+        $result = $this->taskManager->deleteTaskById($id);
+
+        return new JsonResponse(['success' => $result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
 }
