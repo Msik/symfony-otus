@@ -51,4 +51,20 @@ class SkillManager
 
         return $skill;
     }
+
+    public function deleteSkillById(int $skillId): bool
+    {
+        /** @var SkillRepository $repository */
+        $repository = $this->entityManager->getRepository(Skill::class);
+        /** @var Skill $skill */
+        $skill = $repository->find($skillId);
+        if (!$skill) {
+            return false;
+        }
+
+        $this->entityManager->remove($skill);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }

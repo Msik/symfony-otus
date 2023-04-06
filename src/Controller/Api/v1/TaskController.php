@@ -57,7 +57,7 @@ class TaskController
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_task', methods: ['DELETE'])]
-    public function deleteCourse(int $id): Response
+    public function deleteTask(int $id): Response
     {
         $result = $this->taskManager->deleteTaskById($id);
 

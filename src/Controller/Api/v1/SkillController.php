@@ -44,7 +44,7 @@ class SkillController
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'update_skill', methods: ['PUT'])]
-    public function updateTask(Request $request, int $id): Response
+    public function updateSkill(Request $request, int $id): Response
     {
         $body = json_decode($request->getContent(), true);
         if (!$body || !$body['title']) {
@@ -54,5 +54,13 @@ class SkillController
         $result = $this->skillManager->updateSkill($id, $body['title']);
 
         return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_skill', methods: ['DELETE'])]
+    public function deleteSkill(int $id): Response
+    {
+        $result = $this->skillManager->deleteSkillById($id);
+
+        return new JsonResponse(['success' => $result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 }
