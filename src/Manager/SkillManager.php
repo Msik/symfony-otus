@@ -25,4 +25,14 @@ class SkillManager
             'skills' => array_map(static fn (Skill $skill) => $skill->toArray(), (array)$paginator->getIterator()),
         ];
     }
+
+    public function storeSkill(string $titke): ?int
+    {
+        $task = new Skill();
+        $task->setTitle($titke);
+        $this->entityManager->persist($task);
+        $this->entityManager->flush();
+
+        return $task->getId();
+    }
 }

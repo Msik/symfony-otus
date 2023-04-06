@@ -26,4 +26,20 @@ class SkillController
 
         return new JsonResponse($this->skillManager->getSkills($page, $perPage));
     }
+
+    #[Route('', name: 'store_skill', methods: ['POST'])]
+    public function storeSkill(Request $request): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $skillId = $this->skillManager->storeSkill($body['title']);
+        if (!$skillId) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse(['success' => true, 'skillId' => $skillId]);
+    }
 }
