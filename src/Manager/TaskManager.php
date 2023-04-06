@@ -40,4 +40,20 @@ class TaskManager
 
         return $task->getId();
     }
+
+    public function updateTask(int $taskId, string $title): ?Task
+    {
+        /** @var TaskRepository $repository */
+        $repository = $this->entityManager->getRepository(Task::class);
+        /** @var Task $user */
+        $task = $repository->find($taskId);
+        if (!$task) {
+            return null;
+        }
+
+        $task->setTitle($title);
+        $this->entityManager->flush();
+
+        return $task;
+    }
 }
