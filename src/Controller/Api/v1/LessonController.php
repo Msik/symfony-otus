@@ -3,7 +3,6 @@
 namespace App\Controller\Api\v1;
 
 use App\Manager\LessonManager;
-use App\Manager\ModuleManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,5 +41,18 @@ class LessonController
         }
 
         return new JsonResponse(['success' => true, 'lessonId' => $lessondId]);
+    }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'update_lesson', methods: ['PUT'])]
+    public function updateLesson(Request $request, int $id): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->lessonManager->updateLesson($id, $body['title']);
+
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 }

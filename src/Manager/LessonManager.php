@@ -53,4 +53,20 @@ class LessonManager
 
         return $lesson->getId();
     }
+
+    public function updateLesson(int $lessonId, string $title): ?Lesson
+    {
+        /** @var LessonRepository $repository */
+        $repository = $this->entityManager->getRepository(Lesson::class);
+        /** @var Lesson $lesson */
+        $lesson = $repository->find($lessonId);
+        if (!$lesson) {
+            return null;
+        }
+
+        $lesson->setTitle($title);
+        $this->entityManager->flush();
+
+        return $lesson;
+    }
 }
