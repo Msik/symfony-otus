@@ -55,4 +55,12 @@ class LessonController
 
         return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_lesson', methods: ['DELETE'])]
+    public function deleteLesson(int $id): Response
+    {
+        $result = $this->lessonManager->deleteLessonById($id);
+
+        return new JsonResponse(['success' => $result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
 }

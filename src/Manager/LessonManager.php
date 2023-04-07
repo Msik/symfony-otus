@@ -69,4 +69,20 @@ class LessonManager
 
         return $lesson;
     }
+
+    public function deleteLessonById(int $lessonId): bool
+    {
+        /** @var LessonRepository $repository */
+        $repository = $this->entityManager->getRepository(Lesson::class);
+        /** @var Lesson $module */
+        $lesson = $repository->find($lessonId);
+        if (!$lesson) {
+            return false;
+        }
+
+        $this->entityManager->remove($lesson);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }
