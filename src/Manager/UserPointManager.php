@@ -65,4 +65,20 @@ class UserPointManager
 
         return $userPoint->getId();
     }
+
+    public function updateUserPoint(int $userPointId, int $points): ?UserPoint
+    {
+        /** @var UserPointRepository $repository */
+        $repository = $this->entityManager->getRepository(UserPoint::class);
+        /** @var UserPoint $userPoint */
+        $userPoint = $repository->find($userPointId);
+        if (!$userPoint) {
+            return null;
+        }
+
+        $userPoint->setPoints($points);
+        $this->entityManager->flush();
+
+        return $userPoint;
+    }
 }

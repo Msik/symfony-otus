@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
-#[Route(path: '/api/v1/points/')]
+#[Route(path: '/api/v1/points')]
 class UserPointController
 {
     public function __construct(
@@ -50,5 +50,18 @@ class UserPointController
         }
 
         return new JsonResponse(['success' => true, 'userPointId' => $userPointId]);
+    }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'update_user_point', methods: ['PUT'])]
+    public function updateUserPoint(Request $request, int $id): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['points']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->userPointManager->updateUserPoint($id, $body['points']);
+
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
 }
