@@ -41,7 +41,7 @@ class LessonManager
         $lesson->setTitle($title);
 
         if ($moduleId) {
-            /** @var ModuleRepository $courseRepository */
+            /** @var ModuleRepository $moduleRepository */
             $moduleRepository = $this->entityManager->getRepository(Module::class);
             /** @var Module $module */
             $module = $moduleRepository->find($courseId);

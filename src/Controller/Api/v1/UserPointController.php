@@ -29,4 +29,26 @@ class UserPointController
 
         return new JsonResponse($this->userPointManager->getPointsByUser($userId, $page, $perPage));
     }
+
+    #[Route('', name: 'store_user_point', methods: ['POST'])]
+    public function storeUserPoint(Request $request): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['userId']|| !$body['taskId']|| !$body['points']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $skillId = $body['skillId'] ?? null;
+        $userPointId = $this->userPointManager->storeUserPoint(
+            $body['userId'],
+            $body['taskId'],
+            $body['points'],
+            $skillId
+        );
+        if (!$userPointId) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse(['success' => true, 'userPointId' => $userPointId]);
+    }
 }
