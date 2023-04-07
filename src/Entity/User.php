@@ -78,7 +78,6 @@ class User
         return [
             'id' => $this->id,
             'phone' => $this->phone,
-            'points' => [],
             'courses' => array_map(static fn (Course $course) => $course->toArray(), $this->courses->toArray()),
             'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),

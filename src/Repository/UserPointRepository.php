@@ -4,9 +4,24 @@ namespace App\Repository;
 
 use App\Entity\UserPoint;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class UserPointRepository extends EntityRepository
 {
+    public function getPointsByUser(int $userId, int $page, int $perPage): Paginator
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('t')
+            ->from(UserPoint::class, 't')
+            ->andWhere($queryBuilder->expr()->eq('t.user', ':user'))
+            ->setParameter(':user', $userId)
+            ->orderBy('t.id', 'ASC')
+            ->setFirstResult($perPage * ($page - 1))
+            ->setMaxResults($perPage);
+
+        return new Paginator($queryBuilder);
+    }
+
     /**
      * @return UserPoint[]
      */
