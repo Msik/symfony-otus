@@ -2,8 +2,12 @@
 
 namespace App\Manager;
 
+use App\Entity\Course;
 use App\Entity\Lesson;
+use App\Entity\Module;
 use App\Repository\LessonRepository;
+use App\Repository\CourseRepository;
+use App\Repository\ModuleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LessonManager
@@ -23,5 +27,30 @@ class LessonManager
             'maxPage' => $maxPage,
             'lessons' => array_map(static fn (Lesson $lesson) => $lesson->toArray(), (array)$paginator->getIterator()),
         ];
+    }
+
+    public function storeLesson(int $courseId, string $title, ?int $moduleId = null): ?int
+    {
+        /** @var CourseRepository $courseRepository */
+        $courseRepository = $this->entityManager->getRepository(Course::class);
+        /** @var Course $course */
+        $course = $courseRepository->find($courseId);
+
+        $lesson = new Lesson();
+        $lesson->setCourse($course);
+        $lesson->setTitle($title);
+
+        if ($moduleId) {
+            /** @var ModuleRepository $courseRepository */
+            $moduleRepository = $this->entityManager->getRepository(Module::class);
+            /** @var Module $module */
+            $module = $moduleRepository->find($courseId);
+            $lesson->setModule($module);
+        }
+
+        $this->entityManager->persist($lesson);
+        $this->entityManager->flush();
+
+        return $lesson->getId();
     }
 }

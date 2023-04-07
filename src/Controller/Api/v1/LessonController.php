@@ -26,4 +26,21 @@ class LessonController
 
         return new JsonResponse($this->lessonManager->getLessonsByCourse($courseId, $page, $perPage));
     }
+
+    #[Route('', name: 'store_lesson', methods: ['POST'])]
+    public function storeLesson(Request $request, int $courseId): Response
+    {
+        $body = json_decode($request->getContent(), true);
+        if (!$body || !$body['title']) {
+            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $module = $body['moduleId'] ?? null;
+        $lessondId = $this->lessonManager->storeLesson($courseId, $body['title'], $module);
+        if (!$lessondId) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse(['success' => true, 'lessonId' => $lessondId]);
+    }
 }

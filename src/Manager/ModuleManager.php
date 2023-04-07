@@ -27,7 +27,7 @@ class ModuleManager
         ];
     }
 
-    public function storeModule(int $courseId, string $titke): ?int
+    public function storeModule(int $courseId, string $title): ?int
     {
         /** @var CourseRepository $courseRepository */
         $courseRepository = $this->entityManager->getRepository(Course::class);
@@ -36,7 +36,7 @@ class ModuleManager
 
         $module = new Module();
         $module->setCourse($course);
-        $module->setTitle($titke);
+        $module->setTitle($title);
         $this->entityManager->persist($module);
         $this->entityManager->flush();
 
