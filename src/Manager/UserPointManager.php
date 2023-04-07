@@ -81,4 +81,20 @@ class UserPointManager
 
         return $userPoint;
     }
+
+    public function deleteUserPointById(int $userPointId): bool
+    {
+        /** @var UserPointRepository $repository */
+        $repository = $this->entityManager->getRepository(UserPoint::class);
+        /** @var UserPoint $userPoint */
+        $userPoint = $repository->find($userPointId);
+        if (!$userPoint) {
+            return false;
+        }
+
+        $this->entityManager->remove($userPoint);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }

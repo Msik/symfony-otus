@@ -64,4 +64,12 @@ class UserPointController
 
         return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_user_point', methods: ['DELETE'])]
+    public function deleteUserPoint(int $id): Response
+    {
+        $result = $this->userPointManager->deleteUserPointById($id);
+
+        return new JsonResponse(['success' => $result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+    }
 }
