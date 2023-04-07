@@ -60,7 +60,6 @@ class Task
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'lesson' => [],
             'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
             'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
         ];

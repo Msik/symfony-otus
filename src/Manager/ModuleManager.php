@@ -7,9 +7,7 @@ use App\Entity\Module;
 use App\Repository\ModuleRepository;
 use App\Repository\CourseRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: 'lessons/{lessonId}/tasks')]
 class ModuleManager
 {
     public function __construct(
