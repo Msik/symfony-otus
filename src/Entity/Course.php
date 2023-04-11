@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Entity\Trait\TimestampableTrait;
+use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'course')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CourseRepository::class)]
 class Course
 {
     use TimestampableTrait;
@@ -94,5 +95,18 @@ class Course
     public function getUsers(): Collection
     {
         return $this->users;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'lessons' => array_map(static fn (Lesson $lesson) => $lesson->toArray(), $this->lessons->toArray()),
+            'modules' => array_map(static fn (Module $module) => $module->toArray(), $this->modules->toArray()),
+            'users' => array_map(static fn(User $user) => $user->toArray(), $this->users->toArray()),
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
+        ];
     }
 }

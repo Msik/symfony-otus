@@ -85,4 +85,12 @@ class UserPoint
     {
         $this->points = $points;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'points' => $this->points,
+        ];
+    }
 }

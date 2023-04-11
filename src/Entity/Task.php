@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\Trait\TimestampableTrait;
+use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'task')]
 #[ORM\Index(columns: ['lesson_id'], name: 'task__lesson_id__ind')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
     use TimestampableTrait;
@@ -42,5 +43,25 @@ class Task
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    public function getLesson(): Lesson
+    {
+        return $this->lesson;
+    }
+
+    public function setLesson(Lesson $lesson): void
+    {
+        $this->lesson = $lesson;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->updatedAt->format('Y-m-d H:i:s'),
+        ];
     }
 }

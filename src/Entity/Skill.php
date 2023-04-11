@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Entity\Trait\TimestampableTrait;
+use App\Repository\SkillRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'skill')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SkillRepository::class)]
 class Skill
 {
     use TimestampableTrait;
