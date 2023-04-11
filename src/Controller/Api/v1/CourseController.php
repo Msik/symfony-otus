@@ -24,7 +24,7 @@ class CourseController
         $page = $request->query->get('page') ?? 1;
         $user = $request->query->get('user');
         if (!$user) {
-            return new JsonResponse([], 404);
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse($this->courseManager->getCoursesByUser($user, $page, $perPage));
