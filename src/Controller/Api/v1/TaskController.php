@@ -31,7 +31,7 @@ class TaskController
     public function storeTask(Request $request, int $lessonId): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -47,7 +47,7 @@ class TaskController
     public function updateTask(Request $request, int $id): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

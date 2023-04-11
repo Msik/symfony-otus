@@ -30,7 +30,7 @@ class SkillController
     public function storeSkill(Request $request): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -46,7 +46,7 @@ class SkillController
     public function updateSkill(Request $request, int $id): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

@@ -30,7 +30,7 @@ class UserController
     public function storeUser(Request $request): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['phone']) {
+        if (!$body || !is_string($body['phone'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -46,7 +46,7 @@ class UserController
     public function updateCourse(Request $request, int $id): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['phone']) {
+        if (!$body || !is_string($body['phone'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

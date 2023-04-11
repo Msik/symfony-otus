@@ -30,7 +30,7 @@ class LessonController
     public function storeLesson(Request $request, int $courseId): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -47,7 +47,7 @@ class LessonController
     public function updateLesson(Request $request, int $id): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

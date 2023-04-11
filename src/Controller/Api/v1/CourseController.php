@@ -34,7 +34,7 @@ class CourseController
     public function storeCourse(Request $request): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -51,7 +51,7 @@ class CourseController
     public function updateCourse(Request $request, int $id): Response
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !$body['title']) {
+        if (!$body || !is_string($body['title'])) {
             return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
