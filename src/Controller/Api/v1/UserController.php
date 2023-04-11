@@ -52,7 +52,7 @@ class UserController
 
         $result = $this->userManager->updateUser($id, $body['phone']);
 
-        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_user', methods: ['DELETE'])]

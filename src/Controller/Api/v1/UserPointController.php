@@ -24,7 +24,7 @@ class UserPointController
         $page = $request->query->get('page') ?? 1;
         $userId = $request->query->get('userId');
         if (!$userId) {
-            return new JsonResponse([], 404);
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse($this->userPointManager->getPointsByUser($userId, $page, $perPage));
@@ -62,7 +62,7 @@ class UserPointController
 
         $result = $this->userPointManager->updateUserPoint($id, $body['points']);
 
-        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_user_point', methods: ['DELETE'])]

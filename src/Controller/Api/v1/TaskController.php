@@ -3,7 +3,6 @@
 namespace App\Controller\Api\v1;
 
 use App\Manager\TaskManager;
-use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,7 +52,7 @@ class TaskController
 
         $result = $this->taskManager->updateTask($id, $body['title']);
 
-        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_task', methods: ['DELETE'])]

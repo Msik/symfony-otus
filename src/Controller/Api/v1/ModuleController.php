@@ -52,7 +52,7 @@ class ModuleController
 
         $result = $this->moduleManager->updateModule($id, $body['title']);
 
-        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_NOT_FOUND);
+        return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_module', methods: ['DELETE'])]
