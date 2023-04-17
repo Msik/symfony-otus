@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Dto\ManageUserPointDto;
 use App\Entity\Skill;
 use App\Entity\Task;
 use App\Entity\User;
@@ -68,10 +69,7 @@ class UserPointManager
 
     public function updateUserPoint(int $userPointId, int $points): ?UserPoint
     {
-        /** @var UserPointRepository $repository */
-        $repository = $this->entityManager->getRepository(UserPoint::class);
-        /** @var UserPoint $userPoint */
-        $userPoint = $repository->find($userPointId);
+        $userPoint = $this->getUserPointById($userPointId);
         if (!$userPoint) {
             return null;
         }
@@ -84,10 +82,7 @@ class UserPointManager
 
     public function deleteUserPointById(int $userPointId): bool
     {
-        /** @var UserPointRepository $repository */
-        $repository = $this->entityManager->getRepository(UserPoint::class);
-        /** @var UserPoint $userPoint */
-        $userPoint = $repository->find($userPointId);
+        $userPoint = $this->getUserPointById($userPointId);
         if (!$userPoint) {
             return false;
         }
@@ -96,5 +91,34 @@ class UserPointManager
         $this->entityManager->flush();
 
         return true;
+    }
+
+    public function savePointByDto(UserPoint $userPoint, ManageUserPointDto $manageUserPointDto): ?int
+    {
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        /** @var User $user */
+        $user = $userRepository->find($manageUserPointDto->user);
+
+        /** @var TaskRepository $taskRepository */
+        $taskRepository = $this->entityManager->getRepository(Task::class);
+        /** @var Task $task */
+        $task = $taskRepository->find($manageUserPointDto->task);
+
+        $userPoint->setUser($user);
+        $userPoint->setTask($task);
+        $userPoint->setPoints($manageUserPointDto->points);
+        $this->entityManager->persist($userPoint);
+        $this->entityManager->flush();
+
+        return $userPoint->getId();
+    }
+
+    public function getUserPointById(int $id): ?UserPoint
+    {
+        /** @var UserPointRepository $repository */
+        $repository = $this->entityManager->getRepository(UserPoint::class);
+
+        return $repository->find($id);
     }
 }

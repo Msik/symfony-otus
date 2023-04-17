@@ -13,6 +13,21 @@ class TaskManager
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
+    public function getAllTasksForChoice(): array
+    {
+        /** @var TaskRepository $repository */
+        $repository = $this->entityManager->getRepository(Task::class);
+        /** @var Task[] $tasks */
+        $tasks = $repository->findAll();
+
+        $result = [];
+        foreach ($tasks as $task) {
+            $result[$task->getTitle()] = $task->getId();
+        }
+
+        return $result;
+    }
+
     public function getTasks(int $lessonId, int $page, int $perPage): array
     {
         /** @var TaskRepository $repository */

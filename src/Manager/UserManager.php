@@ -12,6 +12,21 @@ class UserManager
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
+    public function getAllUsersForChoice(): array
+    {
+        /** @var UserRepository $repository */
+        $repository = $this->entityManager->getRepository(User::class);
+        /** @var User[] $users */
+        $users = $repository->findAll();
+
+        $result = [];
+        foreach ($users as $user) {
+            $result[$user->getPhone()] = $user->getId();
+        }
+
+        return $result;
+    }
+
     public function getUsers(int $page, int $perPage): array
     {
         /** @var UserRepository $repository */
