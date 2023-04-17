@@ -17,6 +17,7 @@ class UserPointManager
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly UserManager $userManager,
     ) {}
 
     public function getPointsByUser(int $userId, int $page, int $perPage): array
@@ -38,10 +39,7 @@ class UserPointManager
         int $points,
         ?int $skillId = null
     ): ?int {
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->entityManager->getRepository(User::class);
-        /** @var User $user */
-        $user = $userRepository->find($userId);
+        $user = $this->userManager->getUserById($userId);
 
         /** @var TaskRepository $taskRepository */
         $taskRepository = $this->entityManager->getRepository(Task::class);

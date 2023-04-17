@@ -81,4 +81,12 @@ class UserManager
 
         return true;
     }
+
+    public function getUserById(int $id): ?User
+    {
+        /** @var UserRepository $repository */
+        $repository = $this->entityManager->getRepository(User::class);
+
+        return $repository->find($id);
+    }
 }
