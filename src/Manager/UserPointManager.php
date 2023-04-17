@@ -18,6 +18,7 @@ class UserPointManager
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly UserManager $userManager,
+        private readonly TaskManager $taskManager,
     ) {}
 
     public function getPointsByUser(int $userId, int $page, int $perPage): array
@@ -40,11 +41,7 @@ class UserPointManager
         ?int $skillId = null
     ): ?int {
         $user = $this->userManager->getUserById($userId);
-
-        /** @var TaskRepository $taskRepository */
-        $taskRepository = $this->entityManager->getRepository(Task::class);
-        /** @var Task $task */
-        $task = $taskRepository->find($taskId);
+        $task = $this->taskManager->getTaskById($taskId);
 
         $userPoint = new UserPoint();
         $userPoint->setUser($user);
@@ -93,15 +90,8 @@ class UserPointManager
 
     public function savePointByDto(UserPoint $userPoint, ManageUserPointDto $manageUserPointDto): ?int
     {
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->entityManager->getRepository(User::class);
-        /** @var User $user */
-        $user = $userRepository->find($manageUserPointDto->user);
-
-        /** @var TaskRepository $taskRepository */
-        $taskRepository = $this->entityManager->getRepository(Task::class);
-        /** @var Task $task */
-        $task = $taskRepository->find($manageUserPointDto->task);
+        $user = $this->userManager->getUserById($manageUserPointDto->user);
+        $task = $this->taskManager->getTaskById($manageUserPointDto->task);
 
         $userPoint->setUser($user);
         $userPoint->setTask($task);

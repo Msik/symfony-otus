@@ -52,10 +52,7 @@ class UserManager
 
     public function updateUser(int $userId, string $phone): ?User
     {
-        /** @var UserRepository $repository */
-        $repository = $this->entityManager->getRepository(User::class);
-        /** @var User $user */
-        $user = $repository->find($userId);
+        $user = $this->getUserById($userId);
         if (!$user) {
             return null;
         }
@@ -68,10 +65,7 @@ class UserManager
 
     public function deleteUserById(int $userId): bool
     {
-        /** @var UserRepository $repository */
-        $repository = $this->entityManager->getRepository(User::class);
-        /** @var User $user */
-        $user = $repository->find($userId);
+        $user = $this->getUserById($userId);
         if (!$user) {
             return false;
         }
