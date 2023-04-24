@@ -13,6 +13,21 @@ class TaskManager
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
+    public function getAllTasksForChoice(): array
+    {
+        /** @var TaskRepository $repository */
+        $repository = $this->entityManager->getRepository(Task::class);
+        /** @var Task[] $tasks */
+        $tasks = $repository->findAll();
+
+        $result = [];
+        foreach ($tasks as $task) {
+            $result[$task->getTitle()] = $task->getId();
+        }
+
+        return $result;
+    }
+
     public function getTasks(int $lessonId, int $page, int $perPage): array
     {
         /** @var TaskRepository $repository */
@@ -43,10 +58,7 @@ class TaskManager
 
     public function updateTask(int $taskId, string $title): ?Task
     {
-        /** @var TaskRepository $repository */
-        $repository = $this->entityManager->getRepository(Task::class);
-        /** @var Task $task */
-        $task = $repository->find($taskId);
+        $task = $this->getTaskById($taskId);
         if (!$task) {
             return null;
         }
@@ -59,10 +71,7 @@ class TaskManager
 
     public function deleteTaskById(int $taskId): bool
     {
-        /** @var TaskRepository $repository */
-        $repository = $this->entityManager->getRepository(Task::class);
-        /** @var Task $task */
-        $task = $repository->find($taskId);
+        $task = $this->getTaskById($taskId);
         if (!$task) {
             return false;
         }
@@ -71,5 +80,13 @@ class TaskManager
         $this->entityManager->flush();
 
         return true;
+    }
+
+    public function getTaskById(int $id): ?Task
+    {
+        /** @var TaskRepository $repository */
+        $repository = $this->entityManager->getRepository(Task::class);
+
+        return $repository->find($id);
     }
 }

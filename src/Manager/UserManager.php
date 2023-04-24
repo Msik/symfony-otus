@@ -12,6 +12,21 @@ class UserManager
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
+    public function getAllUsersForChoice(): array
+    {
+        /** @var UserRepository $repository */
+        $repository = $this->entityManager->getRepository(User::class);
+        /** @var User[] $users */
+        $users = $repository->findAll();
+
+        $result = [];
+        foreach ($users as $user) {
+            $result[$user->getPhone()] = $user->getId();
+        }
+
+        return $result;
+    }
+
     public function getUsers(int $page, int $perPage): array
     {
         /** @var UserRepository $repository */
@@ -37,10 +52,7 @@ class UserManager
 
     public function updateUser(int $userId, string $phone): ?User
     {
-        /** @var UserRepository $repository */
-        $repository = $this->entityManager->getRepository(User::class);
-        /** @var User $user */
-        $user = $repository->find($userId);
+        $user = $this->getUserById($userId);
         if (!$user) {
             return null;
         }
@@ -53,10 +65,7 @@ class UserManager
 
     public function deleteUserById(int $userId): bool
     {
-        /** @var UserRepository $repository */
-        $repository = $this->entityManager->getRepository(User::class);
-        /** @var User $user */
-        $user = $repository->find($userId);
+        $user = $this->getUserById($userId);
         if (!$user) {
             return false;
         }
@@ -65,5 +74,13 @@ class UserManager
         $this->entityManager->flush();
 
         return true;
+    }
+
+    public function getUserById(int $id): ?User
+    {
+        /** @var UserRepository $repository */
+        $repository = $this->entityManager->getRepository(User::class);
+
+        return $repository->find($id);
     }
 }
