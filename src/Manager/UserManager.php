@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Dto\ManageUserDto;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,5 +83,15 @@ class UserManager
         $repository = $this->entityManager->getRepository(User::class);
 
         return $repository->find($id);
+    }
+
+    public function saveUserFromDto(User $user, ManageUserDto $manageUserDto): ?int
+    {
+        $user->setPhone($manageUserDto->phone);
+        $user->setRoles($manageUserDto->roles);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user->getId();
     }
 }
