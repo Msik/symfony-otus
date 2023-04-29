@@ -34,7 +34,16 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/v1/users, roles: ROLE_ADMIN }
+
         - { path: ^/api/v1/courses, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/api/v1/courses, roles: ROLE_ADMIN, methods: [POST, PUT, DELETE] }
+
+        - { path: ^/api/v1/skills, roles: ROLE_TEACHER }
+        - { path: ^/api/v1/lessons, roles: ROLE_TEACHER }
+
+        - { path: ^/api/v1/points, roles: ROLE_USER, methods: [GET] }
+        - { path: ^/api/v1/points, roles: ROLE_TEACHER, methods: [POST, PUT, DELETE] }
 
     role_hierarchy:
         ROLE_ADMIN: [ROLE_USER, ROLE_TEACHER]
