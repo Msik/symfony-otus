@@ -94,4 +94,28 @@ class UserManager
 
         return $user->getId();
     }
+
+    public function getUserByPhone(string $phone): ?User
+    {
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        /** @var User|null $user */
+        $user = $userRepository->findOneBy(['phone' => $phone]);
+
+        return $user;
+    }
+
+    public function updateUserToken(string $phone): ?string
+    {
+        $user = $this->getUserByPhone($phone);
+        if (!$user) {
+            return null;
+        }
+
+        $token = base64_encode(random_bytes(20));
+        $user->setToken($token);
+        $this->entityManager->flush();
+
+        return $token;
+    }
 }
