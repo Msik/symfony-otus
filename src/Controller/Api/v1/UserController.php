@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api\v1;
 
+use App\Dto\ManageUserDto;
+use App\Entity\User;
 use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,12 +31,9 @@ class UserController
     #[Route('', name: 'store_user', methods: ['POST'])]
     public function storeUser(Request $request): Response
     {
-        $body = json_decode($request->getContent(), true);
-        if (!$body || !is_string($body['phone'])) {
-            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        $saveUserDto = ManageUserDto::fromRequest($request);
 
-        $userId = $this->userManager->storeUser($body['phone']);
+        $userId = $this->userManager->saveUserFromDto(new User(), $saveUserDto);
         if (!$userId) {
             return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
         }
@@ -43,20 +42,21 @@ class UserController
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'update_user', methods: ['PUT'])]
-    public function updateCourse(Request $request, int $id): Response
+    public function updateUser(Request $request, int $id): Response
     {
-        $body = json_decode($request->getContent(), true);
-        if (!$body || !is_string($body['phone'])) {
-            return new JsonResponse(['message' => 'wrong payload'], Response::HTTP_UNPROCESSABLE_ENTITY);
+        $user = $this->userManager->getUserById($id);
+        if (!$user) {
+            return new JsonResponse(['success' => false], Response::HTTP_BAD_REQUEST);
         }
 
-        $result = $this->userManager->updateUser($id, $body['phone']);
+        $saveUserDto = ManageUserDto::fromRequest($request);
+        $result = $this->userManager->saveUserFromDto($user, $saveUserDto);
 
         return new JsonResponse(['success' => (bool)$result], $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/{id}', requirements: ['id' => '\d+'], name: 'delete_user', methods: ['DELETE'])]
-    public function deleteCourse(int $id): Response
+    public function deleteUser(int $id): Response
     {
         $result = $this->userManager->deleteUserById($id);
 

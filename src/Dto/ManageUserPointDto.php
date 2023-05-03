@@ -2,8 +2,6 @@
 
 namespace App\Dto;
 
-use App\Entity\Task;
-use App\Entity\User;
 use App\Entity\UserPoint;
 use Symfony\Component\Validator\Constraints as Assert;
 

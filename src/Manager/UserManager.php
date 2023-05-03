@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Dto\ManageUserDto;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,5 +83,49 @@ class UserManager
         $repository = $this->entityManager->getRepository(User::class);
 
         return $repository->find($id);
+    }
+
+    public function saveUserFromDto(User $user, ManageUserDto $manageUserDto): ?int
+    {
+        $user->setPhone($manageUserDto->phone);
+        $user->setRoles($manageUserDto->roles);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user->getId();
+    }
+
+    public function getUserByPhone(string $phone): ?User
+    {
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        /** @var User|null $user */
+        $user = $userRepository->findOneBy(['phone' => $phone]);
+
+        return $user;
+    }
+
+    public function updateUserToken(string $phone): ?string
+    {
+        $user = $this->getUserByPhone($phone);
+        if (!$user) {
+            return null;
+        }
+
+        $token = base64_encode(random_bytes(20));
+        $user->setToken($token);
+        $this->entityManager->flush();
+
+        return $token;
+    }
+
+    public function getUserByToken(string $token): ?User
+    {
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        /** @var User|null $user */
+        $user = $userRepository->findOneBy(['token' => $token]);
+
+        return $user;
     }
 }

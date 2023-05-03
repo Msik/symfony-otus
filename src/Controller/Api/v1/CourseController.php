@@ -2,16 +2,16 @@
 
 namespace App\Controller\Api\v1;
 
+use App\Entity\User;
 use App\Manager\CourseManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[AsController]
 #[Route(path: '/api/v1/courses')]
-class CourseController
+class CourseController extends AbstractController
 {
     public function __construct(
         private readonly CourseManager $courseManager,
@@ -22,12 +22,10 @@ class CourseController
     {
         $perPage = $request->query->get('perPage') ?? 5;
         $page = $request->query->get('page') ?? 1;
-        $user = $request->query->get('user');
-        if (!$user) {
-            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
-        }
+        /** @var User $user */
+        $user = $this->getUser();
 
-        return new JsonResponse($this->courseManager->getCoursesByUser($user, $page, $perPage));
+        return new JsonResponse($this->courseManager->getCoursesByUser($user->getId(), $page, $perPage));
     }
 
     #[Route('',name: 'store_course', methods: ['POST'])]
