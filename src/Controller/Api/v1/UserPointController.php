@@ -20,6 +20,9 @@ class UserPointController
     #[Route('', name: 'get_user_points', methods: ['GET'])]
     public function getUserPoints(Request $request): Response
     {
+        throw new \Exception('123');
+
+        dd(123);
         $perPage = $request->query->get('perPage') ?? 5;
         $page = $request->query->get('page') ?? 1;
         $userId = $request->query->get('userId');
