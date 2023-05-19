@@ -3,7 +3,6 @@
 namespace App\Controller\Api\v1;
 
 use App\Manager\UserPointManager;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

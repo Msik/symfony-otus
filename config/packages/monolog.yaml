@@ -21,6 +21,7 @@ when@dev:
             console:
                 type: console
                 process_psr_3_messages: false
+                level: error
                 channels: ["!event", "!doctrine", "!console"]
             sentry:
                 type: service
