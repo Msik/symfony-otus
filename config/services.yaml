@@ -25,3 +25,7 @@ services:
     App\Symfony\MigrationEventSubscriber:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
+
+    App\Service\AsyncService:
+        calls:
+            - ['registerProducer', [!php/const App\Service\AsyncService::PUT_TASK_POINTS, '@old_sound_rabbit_mq.put_task_points_producer']]
