@@ -47,11 +47,17 @@ services:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
 
+  redis:
+    container_name: 'redis'
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+
   sentry-redis:
     container_name: 'sentry-redis'
     image: redis:6.2-alpine
     ports:
-      - "6379:6379"
+      - "16379:6379"
 
   sentry-postgres:
     image: postgres
