@@ -36,4 +36,26 @@ class UserPointRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getPoints(int $userId, ?int $taskId = null, ?int $skillId = null): int
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('SUM(up.points)')
+            ->from(UserPoint::class, 'up')
+            ->andWhere($queryBuilder->expr()->eq('up.user', ':userId'))
+            ->setParameter(':userId', $userId);
+
+        if ($taskId) {
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('up.task', ':taskId'))
+                ->setParameter(':taskId', $taskId);
+        }
+
+        if ($skillId) {
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('up.skill', ':skillId'))
+                ->setParameter(':skillId', $skillId);
+        }
+
+        return $queryBuilder->getQuery()
+            ->getSingleScalarResult();
+    }
 }

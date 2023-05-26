@@ -4,12 +4,8 @@ namespace App\Manager;
 
 use App\Dto\ManageUserPointDto;
 use App\Entity\Skill;
-use App\Entity\Task;
-use App\Entity\User;
 use App\Entity\UserPoint;
 use App\Repository\UserPointRepository;
-use App\Repository\UserRepository;
-use App\Repository\TaskRepository;
 use App\Repository\SkillRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -108,5 +104,13 @@ class UserPointManager
         $repository = $this->entityManager->getRepository(UserPoint::class);
 
         return $repository->find($id);
+    }
+
+    public function getPoints(int $userId, ?int $taskId = null, ?int $skillId = null): int
+    {
+        /** @var UserPointRepository $repository */
+        $repository = $this->entityManager->getRepository(UserPoint::class);
+
+        return $repository->getPoints($userId, $taskId, $skillId);
     }
 }
