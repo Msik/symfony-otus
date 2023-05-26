@@ -5,6 +5,7 @@ namespace App\Controller\Api\GetTaskPoints\v1;
 use App\Entity\User;
 use App\Manager\UserPointManager;
 use App\Service\AsyncService;
+use App\Service\PointsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,7 @@ class Controller extends AbstractController
 {
     public function __construct(
         private readonly AsyncService $asyncService,
-        private readonly UserPointManager $userPointManager
+        private readonly PointsService $pointsService
     ) {}
 
     #[Route(path: '/api/v1/tasks-points', methods: ['GET'])]
@@ -27,7 +28,7 @@ class Controller extends AbstractController
         $skillId = $request->query->get('skill') ?? null;
 
         return new JsonResponse(
-            ['result' => $this->userPointManager->getPoints($user->getId(), $taskId, $skillId)],
+            ['result' => $this->pointsService->getPoints($user->getId(), $taskId, $skillId)],
             Response::HTTP_OK
         );
     }

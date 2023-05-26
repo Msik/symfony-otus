@@ -29,3 +29,18 @@ services:
     App\Service\AsyncService:
         calls:
             - ['registerProducer', [!php/const App\Service\AsyncService::PUT_TASK_POINTS, '@old_sound_rabbit_mq.put_task_points_producer']]
+
+    redis_client:
+        class: Redis
+        factory: Symfony\Component\Cache\Adapter\RedisAdapter::createConnection
+        arguments:
+            - '%env(REDIS_DSN)%'
+
+    redis_adapter:
+        class: Symfony\Component\Cache\Adapter\RedisTagAwareAdapter
+        arguments:
+            - '@redis_client'
+            - 'my_app'
+
+    App\Service\PointsService:
+        $cache: '@redis_adapter'
