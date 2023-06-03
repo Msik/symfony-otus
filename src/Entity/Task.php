@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'task')]
@@ -24,6 +26,14 @@ class Task
     #[ORM\ManyToOne(targetEntity: Lesson::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'lesson_id', referencedColumnName: 'id', nullable: false)]
     private Lesson $lesson;
+
+    #[ORM\OneToMany(targetEntity: TaskSkillProportion::class, mappedBy: 'task')]
+    private Collection $skillProportion;
+
+    public function __construct()
+    {
+        $skillProportion = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -53,6 +63,18 @@ class Task
     public function setLesson(Lesson $lesson): void
     {
         $this->lesson = $lesson;
+    }
+
+    public function addSkillProportion(TaskSkillProportion $taskSkillProportion): void
+    {
+        if (!$this->skillProportion->contains($taskSkillProportion)) {
+            $this->skillProportion->add($taskSkillProportion);
+        }
+    }
+
+    public function getSkillProportion(): Collection
+    {
+        return $this->skillProportion;
     }
 
     public function toArray(): array

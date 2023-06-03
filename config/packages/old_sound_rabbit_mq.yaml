@@ -1,0 +1,22 @@
+old_sound_rabbit_mq:
+    connections:
+        default:
+            url: '%env(RABBITMQ_URL)%'
+
+    producers:
+        put_task_points:
+            connection: default
+            exchange_options: {name: 'old_sound_rabbit_mq.put_task_points', type: direct}
+
+    consumers:
+        put_task_points:
+            connection: default
+            exchange_options: {name: 'old_sound_rabbit_mq.put_task_points', type: direct}
+            queue_options: {name: 'old_sound_rabbit_mq.consumer.put_task_points'}
+            callback: App\Consumer\PutTaskPoints\Consumer
+            idle_timeout: 300
+            idle_timeout_exit_code: 0
+            graceful_max_execution:
+                timeout: 1800
+                exit_code: 0
+            qos_options: {prefetch_size: 0, prefetch_count: 1, global: false}
