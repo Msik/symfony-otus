@@ -7,8 +7,10 @@ use App\Entity\User;
 use App\Entity\TaskSkillProportion;
 use App\Entity\UserPoint;
 use App\Manager\TaskManager;
+use App\Repository\UserPointRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 
 class PointsService
 {
@@ -20,6 +22,14 @@ class PointsService
     public function putByDto(User $user, ManageTaskPointDto $manageTaskPointDto): bool
     {
         $task = $this->taskManager->getTaskById($manageTaskPointDto->taskId);
+        if (!$task) {
+            throw new InvalidArgumentException('Wrong task');
+        }
+
+        // TODO sql transaction
+        /** @var UserPointRepository $repository */
+        $userPointRepository = $this->entityManager->getRepository(UserPoint::class);
+        $userPointRepository->removeByTask($user->getId(), $task->getId());
 
         $proportionPoints = $this->getPointsByProportion($task->getSkillProportion(), $manageTaskPointDto->points);
         foreach ($proportionPoints as $points) {
