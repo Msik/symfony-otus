@@ -7,7 +7,8 @@ use App\Manager\UserManager;
 class AuthService
 {
     public function __construct(
-        private readonly UserManager $userManager
+        private readonly UserManager $userManager,
+        private readonly AuthCodeService $authCodeService,
     ) {}
 
     public function isCredentialsValid(string $phone, string $code): bool
@@ -17,8 +18,12 @@ class AuthService
             return false;
         }
 
-        // TODO добавить проверку кода
-        return true;
+        $realCode = $this->authCodeService->getCode($phone);
+        if ($realCode === null) {
+            return false;
+        }
+
+        return $realCode === $code;
     }
 
     public function getToken(string $login): ?string
