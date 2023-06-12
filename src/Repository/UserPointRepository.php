@@ -58,4 +58,15 @@ class UserPointRepository extends EntityRepository
         return $queryBuilder->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function removeByTask(int $userId, int $taskId)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        return $queryBuilder->delete(UserPoint::class, 'up')
+            ->andWhere($queryBuilder->expr()->eq('up.user', ':userId'))
+            ->andWhere($queryBuilder->expr()->eq('up.task', ':taskId'))
+            ->setParameters([':userId' => $userId, ':taskId' => $taskId])
+            ->getQuery()
+            ->execute();
+    }
 }

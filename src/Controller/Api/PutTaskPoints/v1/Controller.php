@@ -5,7 +5,6 @@ namespace App\Controller\Api\PutTaskPoints\v1;
 use App\Entity\User;
 use App\Dto\ManageTaskPointDto;
 use App\Service\AsyncService;
-use App\Service\PointsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

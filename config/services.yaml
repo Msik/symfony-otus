@@ -41,6 +41,3 @@ services:
         arguments:
             - '@redis_client'
             - 'my_app'
-
-    App\Service\PointsService:
-        $cache: '@redis_adapter'

@@ -89,4 +89,12 @@ class TaskManager
 
         return $repository->find($id);
     }
+
+    public function getTaskByTitle(string $title): ?Task
+    {
+        /** @var TaskRepository $repository */
+        $repository = $this->entityManager->getRepository(Task::class);
+
+        return $repository->findOneBy(['title' => $title]);
+    }
 }

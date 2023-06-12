@@ -16,7 +16,7 @@ class Controller extends AbstractController
 {
     public function __construct(
         private readonly AsyncService $asyncService,
-        private readonly PointsService $pointsService
+        private readonly UserPointManager $userPointManager
     ) {}
 
     #[Route(path: '/api/v1/tasks-points', methods: ['GET'])]
@@ -28,7 +28,7 @@ class Controller extends AbstractController
         $skillId = $request->query->get('skill') ?? null;
 
         return new JsonResponse(
-            ['result' => $this->pointsService->getPoints($user->getId(), $taskId, $skillId)],
+            ['result' => $this->userPointManager->getPoints($user->getId(), $taskId, $skillId)],
             Response::HTTP_OK
         );
     }

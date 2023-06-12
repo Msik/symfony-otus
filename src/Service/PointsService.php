@@ -7,26 +7,29 @@ use App\Entity\User;
 use App\Entity\TaskSkillProportion;
 use App\Entity\UserPoint;
 use App\Manager\TaskManager;
-use App\Manager\UserPointManager;
+use App\Repository\UserPointRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Cache\ItemInterface;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use InvalidArgumentException;
 
 class PointsService
 {
-    private const CACHE_TAG = 'points';
-
     public function __construct(
         private readonly TaskManager $taskManager,
-        private readonly UserPointManager $userPointManager,
         private readonly EntityManagerInterface $entityManager,
-        private readonly TagAwareCacheInterface $cache,
     ) {}
 
     public function putByDto(User $user, ManageTaskPointDto $manageTaskPointDto): bool
     {
         $task = $this->taskManager->getTaskById($manageTaskPointDto->taskId);
+        if (!$task) {
+            throw new InvalidArgumentException('Wrong task');
+        }
+
+        // TODO sql transaction
+        /** @var UserPointRepository $repository */
+        $userPointRepository = $this->entityManager->getRepository(UserPoint::class);
+        $userPointRepository->removeByTask($user->getId(), $task->getId());
 
         $proportionPoints = $this->getPointsByProportion($task->getSkillProportion(), $manageTaskPointDto->points);
         foreach ($proportionPoints as $points) {
@@ -39,7 +42,6 @@ class PointsService
         }
 
         $this->entityManager->flush();
-        $this->cache->invalidateTags([self::CACHE_TAG . $user->getId()]);
 
         return true;
     }
@@ -66,21 +68,5 @@ class PointsService
         }
 
         return $proportionPoints;
-    }
-
-    public function getPoints(int $userId, ?int $taskId = null, ?int $skillId = null): int
-    {
-        $userPointManager = $this->userPointManager;
-
-        return $this->cache->get(
-            "points_{$userId}_{$taskId}_{$skillId}",
-            function(ItemInterface $item) use ($userPointManager, $userId, $taskId, $skillId) {
-                $points = $userPointManager->getPoints($userId, $taskId, $skillId);
-                $item->set($points);
-                $item->tag(self::CACHE_TAG . $userId);
-
-                return $points;
-            }
-        );
     }
 }
