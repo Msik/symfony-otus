@@ -2,10 +2,10 @@
 
 namespace App\Controller\Api\GetTaskPoints\v1;
 
+use App\Dto\ManageGetPointDto;
 use App\Entity\User;
 use App\Manager\UserPointManager;
 use App\Service\AsyncService;
-use App\Service\PointsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +24,10 @@ class Controller extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $taskId = $request->query->get('task') ?? null;
-        $skillId = $request->query->get('skill') ?? null;
+        $getPointDto = ManageGetPointDto::fromRequest($request);
 
         return new JsonResponse(
-            ['result' => $this->userPointManager->getPoints($user->getId(), $taskId, $skillId)],
+            ['result' => $this->userPointManager->getPointsByDto($user->getId(), $getPointDto)],
             Response::HTTP_OK
         );
     }

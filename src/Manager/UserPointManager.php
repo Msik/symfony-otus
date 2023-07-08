@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Dto\ManageGetPointDto;
 use App\Dto\ManageUserPointDto;
 use App\Entity\Skill;
 use App\Entity\UserPoint;
@@ -106,11 +107,11 @@ class UserPointManager
         return $repository->find($id);
     }
 
-    public function getPoints(int $userId, ?int $taskId = null, ?int $skillId = null): int
+    public function getPointsByDto(int $userId, ManageGetPointDto $getPointDto): int
     {
         /** @var UserPointRepository $repository */
         $repository = $this->entityManager->getRepository(UserPoint::class);
 
-        return $repository->getPoints($userId, $taskId, $skillId);
+        return $repository->getPointsByDto($userId, $getPointDto);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Dto\ManageGetPointDto;
 use App\Entity\UserPoint;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -37,7 +38,7 @@ class UserPointRepository extends EntityRepository
             ->getResult();
     }
 
-    public function getPoints(int $userId, ?int $taskId = null, ?int $skillId = null): int
+    public function getPointsByDto(int $userId, ManageGetPointDto $getPointDto): int
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->select('SUM(up.points)')
@@ -45,14 +46,31 @@ class UserPointRepository extends EntityRepository
             ->andWhere($queryBuilder->expr()->eq('up.user', ':userId'))
             ->setParameter(':userId', $userId);
 
-        if ($taskId) {
+        if ($getPointDto->taskId) {
             $queryBuilder->andWhere($queryBuilder->expr()->eq('up.task', ':taskId'))
-                ->setParameter(':taskId', $taskId);
+                ->setParameter(':taskId', $getPointDto->taskId);
         }
 
-        if ($skillId) {
+        if ($getPointDto->skillId) {
             $queryBuilder->andWhere($queryBuilder->expr()->eq('up.skill', ':skillId'))
-                ->setParameter(':skillId', $skillId);
+                ->setParameter(':skillId', $getPointDto->skillId);
+        }
+
+        if ($getPointDto->courseId) {
+            $queryBuilder->innerJoin('up.task', 't')
+                ->innerJoin('t.lesson', 'l')
+                ->andWhere($queryBuilder->expr()->eq('l.course', ':courseId'))
+                ->setParameter(':courseId', $getPointDto->courseId);
+        }
+
+        if ($getPointDto->startDate) {
+            $queryBuilder->andWhere($queryBuilder->expr()->gte('up.createdAt', ':startDate'))
+                ->setParameter(':startDate', $getPointDto->startDate);
+        }
+
+        if ($getPointDto->endDate) {
+            $queryBuilder->andWhere($queryBuilder->expr()->lte('up.updatedAt', ':endDate'))
+                ->setParameter(':endDate', $getPointDto->endDate);
         }
 
         return $queryBuilder->getQuery()
