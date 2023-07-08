@@ -2,6 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,6 +15,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'course')]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
+#[ApiResource(
+    security: "is_granted('ROLE_USER')",
+    operations: [
+        new Get(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_ADMIN')")
+    ]
+)]
+#[ApiFilter(SearchFilter::class, properties: ['users' => 'exact'])]
 class Course
 {
     use TimestampableTrait;

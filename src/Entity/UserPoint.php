@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\UserPointRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(columns: ['skill_id'], name: 'user_point__skill_id__ind')]
 #[ORM\Index(columns: ['user_id', 'task_id'], name: 'user_point__user_id__task_id__ind')]
 #[ORM\Entity(repositoryClass: UserPointRepository::class)]
+#[ApiResource(
+    security: "is_granted('ROLE_USER')",
+    operations: [
+        new Get(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_ADMIN')")
+    ]
+)]
 class UserPoint
 {
     use TimestampableTrait;
