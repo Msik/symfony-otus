@@ -17,6 +17,9 @@ security:
         token:
             pattern: ^/api/v1/token
             security: false
+        graph:
+            pattern: ^/api-platform
+            security: false
         main:
             lazy: true
             provider: app_user_provider
