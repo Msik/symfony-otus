@@ -40,6 +40,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Course::class, mappedBy: 'users')]
     private Collection $courses;
 
+    #[ORM\ManyToMany(targetEntity: Achievement::class, mappedBy: 'users')]
+    private Collection $achievements;
+
     #[ORM\Column(type: 'json', length: 1024, nullable: false, options: ['default' => '[]'])]
     private array $roles = [];
 
@@ -50,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->points = new ArrayCollection();
         $this->courses = new ArrayCollection();
+        $this->achievements = new ArrayCollection();
     }
 
     public function getId(): int
@@ -89,6 +93,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCourses(): Collection
     {
         return $this->courses;
+    }
+
+    public function addAchievement(Course $course): void
+    {
+        if (!$this->achievements->contains($course)) {
+            $this->achievements->add($course);
+        }
+    }
+
+    public function getAchievements(): Collection
+    {
+        return $this->achievements;
     }
 
     /**
