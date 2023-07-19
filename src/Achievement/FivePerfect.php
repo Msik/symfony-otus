@@ -26,9 +26,9 @@ class FivePerfect implements AchievementInterface
         }
 
         $points = $this->userPointManager->getGroupedPointsByUser($user->getId());
-        // if (count($points) < 5) {
-        //     return null;
-        // }
+        if (count($points) < 5) {
+            return null;
+        }
 
         foreach ($points as $point) {
             if ($point['points'] < 10) {

@@ -5,6 +5,7 @@ namespace UnitTests\Service;
 use App\Entity\Skill;
 use App\Entity\TaskSkillProportion;
 use App\Manager\TaskManager;
+use App\Service\AchievementService;
 use App\Service\PointsService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -80,7 +81,7 @@ class PointsServiceTest extends TestCase
      */
     public function testGetPointsByProportion(Collection $proportions, int $points, array $expected): void
     {
-        $pointsService = new PointsService($this->createMock(TaskManager::class), $this->createMock(EntityManagerInterface::class));
+        $pointsService = new PointsService($this->createMock(TaskManager::class), $this->createMock(EntityManagerInterface::class), $this->createMock(AchievementService::class));
 
         $result = $pointsService->getPointsByProportion($proportions, $points);
 

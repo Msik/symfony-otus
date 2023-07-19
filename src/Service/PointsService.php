@@ -17,6 +17,7 @@ class PointsService
     public function __construct(
         private readonly TaskManager $taskManager,
         private readonly EntityManagerInterface $entityManager,
+        private readonly AchievementService $achievementService
     ) {}
 
     public function putByDto(User $user, ManageTaskPointDto $manageTaskPointDto): bool
@@ -42,6 +43,8 @@ class PointsService
         }
 
         $this->entityManager->flush();
+
+        $this->achievementService->checkAchievements($user);
 
         return true;
     }
