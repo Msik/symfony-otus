@@ -41,3 +41,7 @@ services:
         arguments:
             - '@redis_client'
             - 'my_app'
+
+    App\Achievement\FivePerfect:
+        class: App\Achievement\FivePerfect
+        public: true

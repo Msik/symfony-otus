@@ -95,10 +95,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->courses;
     }
 
-    public function addAchievement(Course $course): void
+    public function addAchievement(Achievement $achievement): void
     {
-        if (!$this->achievements->contains($course)) {
-            $this->achievements->add($course);
+        if (!$this->achievements->contains($achievement)) {
+            $this->achievements->add($achievement);
         }
     }
 

@@ -2,9 +2,11 @@
 
 namespace App\Controller\Api\GetTaskPoints\v1;
 
+use App\Achievement\FivePerfect;
 use App\Dto\ManageGetPointDto;
 use App\Entity\User;
 use App\Manager\UserPointManager;
+use App\Service\AchievementService;
 use App\Service\AsyncService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +18,8 @@ class Controller extends AbstractController
 {
     public function __construct(
         private readonly AsyncService $asyncService,
-        private readonly UserPointManager $userPointManager
+        private readonly UserPointManager $userPointManager,
+        private readonly AchievementService $achievementService
     ) {}
 
     #[Route(path: '/api/v1/tasks-points', methods: ['GET'])]
@@ -24,6 +27,7 @@ class Controller extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        dd($this->achievementService->checkAchievements($user));
         $getPointDto = ManageGetPointDto::fromRequest($request);
 
         return new JsonResponse(

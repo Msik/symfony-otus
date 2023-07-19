@@ -114,4 +114,12 @@ class UserPointManager
 
         return $repository->getPointsByDto($userId, $getPointDto);
     }
+
+    public function getGroupedPointsByUser(int $userId)
+    {
+        /** @var UserPointRepository $repository */
+        $repository = $this->entityManager->getRepository(UserPoint::class);
+
+        return $repository->getGroupedPoints($userId);
+    }
 }

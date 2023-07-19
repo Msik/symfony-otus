@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Dto\ManageGetPointDto;
 use App\Entity\UserPoint;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class UserPointRepository extends EntityRepository
@@ -21,21 +22,6 @@ class UserPointRepository extends EntityRepository
             ->setMaxResults($perPage);
 
         return new Paginator($queryBuilder);
-    }
-
-    /**
-     * @return UserPoint[]
-     */
-    public function getByUserTask(int $userId, int $taskId): array
-    {
-        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
-        return $queryBuilder->select('up')
-            ->from(UserPoint::class, 'up')
-            ->andWhere($queryBuilder->expr()->eq('up.user', ':userId'))
-            ->andWhere($queryBuilder->expr()->eq('up.task', ':taskId'))
-            ->setParameters([':userId' => $userId, ':taskId' => $taskId])
-            ->getQuery()
-            ->getResult();
     }
 
     public function getPointsByDto(int $userId, ManageGetPointDto $getPointDto): int
@@ -75,6 +61,18 @@ class UserPointRepository extends EntityRepository
 
         return $queryBuilder->getQuery()
             ->getSingleScalarResult();
+    }
+
+    public function getGroupedPoints(int $userId): array
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        return $queryBuilder->select('IDENTITY(up.user) as user_id', 'IDENTITY(up.task) as task_id', 'SUM(up.points) as points')
+            ->from(UserPoint::class, 'up')
+            ->andWhere($queryBuilder->expr()->eq('up.user', ':userId'))
+            ->groupBy('up.user, up.task')
+            ->setParameters([':userId' => $userId])
+            ->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
     }
 
     public function removeByTask(int $userId, int $taskId)
