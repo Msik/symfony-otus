@@ -45,3 +45,7 @@ services:
     App\Achievement\FivePerfect:
         class: App\Achievement\FivePerfect
         public: true
+
+    App\Service\PointsCacheService:
+        arguments:
+            $cache: '@redis_adapter'

@@ -5,7 +5,7 @@ namespace App\Consumer\PutTaskPoints;
 use App\Consumer\PutTaskPoints\Input\Message;
 use App\Dto\ManageTaskPointDto;
 use App\Entity\User;
-use App\Service\PointsService;
+use App\Service\PointsCacheService;
 use Doctrine\ORM\EntityManagerInterface;
 use JsonException;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -17,7 +17,7 @@ class Consumer implements ConsumerInterface
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ValidatorInterface $validator,
-        private readonly PointsService $pointsService,
+        private readonly PointsCacheService $pointsService,
     ) {}
 
     public function execute(AMQPMessage $msg): int
